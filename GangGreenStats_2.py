@@ -4,10 +4,8 @@
 # This script gathers all the Oakland Hockey Stats for all 4 GG teams, for every season that which the website has data.
  
 # Oultine:
-
 # 1) Import libraries
 # 2) Establish mapping of GG Team ID's in URL to Team Names (Gang Green 1, 2, etc.)
-
 # 3/4) Get a base dataset of all the players who played for Gang Green in our season dim range
 # 3/4) Read in a CSV that converts SeasonIDs to the Season Name
 #  5) Light data manipulation. Removing columns, create Points per Game metric, etc.
@@ -40,7 +38,6 @@ gg_team_ids = [1843, 692, 4622, 4818]
 gg_team_names = ['Gang Green 1', 'Gang Green 2', 'Gang Green 3', 'Gang Green 4']
 team_dim = create_team_dim_table(gg_team_ids, gg_team_names)
 
-
 # 3/4) Get a base dataset of all the players who played for Gang Green in our season dim range
 def base_web_data(team_ids, season_dim_csv):
 
@@ -65,9 +62,6 @@ def base_web_data(team_ids, season_dim_csv):
 
     # For each GG team, loop over every season to grab their stats and append it to our big dataframe we made above.
     # This is written very inefficiently and will be pretty slow. 
-
-    # season dim dataframe
-    # season_dim = pd.read_csv('OaklandHockeySeasonDim.csv')
 
     for team_id in team_ids:
 
@@ -96,9 +90,8 @@ def base_web_data(team_ids, season_dim_csv):
     return df_main
 
 # 4) Read in a CSV that converts SeasonIDs to the Season Name
-season_dim = pd.read_csv('OaklandHockeySeasondDim.csv')
+season_dim = pd.read_csv('OaklandHockeySeasonDim.csv')
 df_main = base_web_data(gg_team_ids, season_dim)
-
 
 # 5) Light data manipulation. Removing columns, create Points per Game metric, etc.
 def data_manip(df):
@@ -139,6 +132,3 @@ def data_manip(df):
     manip_df.to_csv('OaklandHockeyData.csv', index = False)
 
     return manip_df
-
-
-# data_manip(df_main)
