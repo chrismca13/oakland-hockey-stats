@@ -90,7 +90,7 @@ def base_web_data(team_ids, season_dim_csv):
     return df_main
 
 # 4) Read in a CSV that converts SeasonIDs to the Season Name
-season_dim = pd.read_csv('OaklandHockeySeasonDim.csv')
+season_dim = pd.read_csv('Input_data/OaklandHockeySeasonDim.csv')
 df_main = base_web_data(gg_team_ids, season_dim)
 
 # 5) Light data manipulation. Removing columns, create Points per Game metric, etc.
@@ -129,6 +129,8 @@ def data_manip(df):
     manip_df['lastupdated'] = datetime.today().strftime('%Y-%m-%d')
 
     # Ouput results to CSV
-    manip_df.to_csv('OaklandHockeyData.csv', index = False)
+    manip_df.to_csv('Output_data/OaklandHockeyData.csv', index = False)
 
     return manip_df
+
+data_manip(df_main)
