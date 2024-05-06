@@ -113,8 +113,7 @@ def data_manip(df):
 
     # Cast as integers so the join below works (otherwise it won't recognize 5.0 as 5, etc.)
     df['SeasonID'] = df['SeasonID'].astype(int) 
-    df['TeamID'] = df['TeamID'].astype(int) 
-
+    df['TeamID'] = df['TeamID'].astype(int)
     # Convert season IDs (#40) to Season Name (Fall 2017)
     df_final = pd.merge(left = df, right = season_dim, how = 'left', left_on = 'SeasonID', right_on = 'SeasonID')
 
