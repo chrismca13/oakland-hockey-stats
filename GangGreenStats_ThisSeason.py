@@ -1,79 +1,97 @@
 
-# 1) Import libraries. All we need is Pandas
+# 1) Import libraries. 
+# Data Manipulation
 import pandas as pd
+
+# Script automation
+import time
 
 # Ignore any warning messages. 
 import warnings
 warnings.filterwarnings('ignore')
 
-# 2) Create simple mapping table that converts the Team ID to a Team Name.
-d5_team_ids = [692, 3424, 4679, 2585, 4680, 4719, 4400, 677]
-d5_team_names = ['Gang Green 2', 'Oakland Reapers', 'Silver Bullets 2', 'No Regretzkys', 'Sofa King Old', 'Lot Lizards', 'Silver Squids', 'Prairie Dogs']
+while(True):
+    try:
 
-def create_team_dim(team_ids, team_names):
-    """
-    Args:
-    team_ids (list): list of team ids in the URL string
-    team_names (list): List of team names in the same order as the team_ids
+        # 2) Create simple mapping table that converts the Team ID to a Team Name.
+        d5_team_ids = [692, 3424, 4679, 2585, 4680, 4719, 4400, 677]
+        d5_team_names = ['Gang Green 2', 'Oakland Reapers', 'Silver Bullets 2', 'No Regretzkys', 'Sofa King Old', 'Lot Lizards', 'Silver Squids', 'Prairie Dogs']
 
-    returns:
-    dataframe of two lists zipped together.
-    """
+        def create_team_dim(team_ids, team_names):
+            """
+            Args:
+            team_ids (list): list of team ids in the URL string
+            team_names (list): List of team names in the same order as the team_ids
 
-    df_team_dim = pd.DataFrame(zip(team_ids, team_names), columns = ['TeamID', 'Team Name'])
-    return df_team_dim
+            returns:
+            dataframe of two lists zipped together.
+            """
 
-team_dim = create_team_dim(d5_team_ids, d5_team_names)
+            df_team_dim = pd.DataFrame(zip(team_ids, team_names), columns = ['TeamID', 'Team Name'])
+            return df_team_dim
 
-def current_season_df(team_dim_df):
-    """
-    args:
-    team_dim_df (dataframe): Table that is the output of create_team_dim() function above.
+        print('Creating team_dim...')
+        team_dim = create_team_dim(d5_team_ids, d5_team_names)
+        print('Team dim created.')
 
-    returns: None
-    Updates the current season csv's in the Output_data folder
-    """
+        def current_season_df(team_dim_df):
+            """
+            args:
+            team_dim_df (dataframe): Table that is the output of create_team_dim() function above.
 
-    team_id_list = list(team_dim_df['TeamID'])
-    team_name_list = list(team_dim_df['Team Name'])
-    
-    df_stats = []
-    df_goalies = []
-    df_team = []
+            returns: None
+            Updates the current season csv's in the Output_data folder
+            """
 
-    for i in team_id_list:
+            team_id_list = list(team_dim_df['TeamID'])
+            team_name_list = list(team_dim_df['Team Name'])
+            
+            df_stats = []
+            df_goalies = []
+            df_team = []
 
-        url = 'https://stats.sharksice.timetoscore.com/display-schedule?team='+str(i)+'&season=0&league=27&stat_class=1'
+            for i in team_id_list:
+
+                url = 'https://stats.sharksice.timetoscore.com/display-schedule?team='+str(i)+'&season=0&league=27&stat_class=1'
+                
+                df = pd.read_html(url)
+                
+                # stats
+                df[1].columns = df[1].columns.droplevel()
+                df[1]['TeamID'] = i
+                df_stats.append(df[1])
+                
+                # goalies
+                df[2].columns = df[2].columns.droplevel()
+                df[2]['TeamID'] = i
+                df_goalies.append(df[2])
+                
+                # team
+                df[3].columns = df[3].columns.droplevel()
+                df[3]['TeamID'] = i
+                df_team.append(df[3])
+                
+            df_stats_final = pd.concat(df_stats)
+            df_goalies_final = pd.concat(df_goalies)
+            df_team_final = pd.concat(df_team)
+
+            # Join to get team names from Team ID
+            df_stats_final = pd.merge(left = df_stats_final, right = team_dim, on = 'TeamID')
+            df_goalies_final = pd.merge(left = df_goalies_final, right = team_dim, on = 'TeamID')
+            df_team_final = pd.merge(left = df_team_final, right = team_dim, on = 'TeamID')
+
+            # Save to CSV
+            df_stats_final.to_csv('Output_data/currentseason_stats.csv', index = False)
+            df_goalies_final.to_csv('Output_data/currentseason_goalies.csv', index = False)
+            df_team_final.to_csv('Output_data/currentseason_team.csv', index = False)
+
+        print('Creating updating csv...')
+        current_season_df(team_dim)
+        print('Run Complete')
+
+        # Run every 6 days (unless computer is shut off)
+        time.sleep(518400) # number is in seconds
         
-        df = pd.read_html(url)
-        
-        # stats
-        df[1].columns = df[1].columns.droplevel()
-        df[1]['TeamID'] = i
-        df_stats.append(df[1])
-        
-        # goalies
-        df[2].columns = df[2].columns.droplevel()
-        df[2]['TeamID'] = i
-        df_goalies.append(df[2])
-        
-        # team
-        df[3].columns = df[3].columns.droplevel()
-        df[3]['TeamID'] = i
-        df_team.append(df[3])
-        
-    df_stats_final = pd.concat(df_stats)
-    df_goalies_final = pd.concat(df_goalies)
-    df_team_final = pd.concat(df_team)
-
-    # Join to get team names from Team ID
-    df_stats_final = pd.merge(left = df_stats_final, right = team_dim, on = 'TeamID')
-    df_goalies_final = pd.merge(left = df_goalies_final, right = team_dim, on = 'TeamID')
-    df_team_final = pd.merge(left = df_team_final, right = team_dim, on = 'TeamID')
-
-    # Save to CSV
-    df_stats_final.to_csv('Output_data/currentseason_stats.csv', index = False)
-    df_goalies_final.to_csv('Output_data/currentseason_goalies.csv', index = False)
-    df_team_final.to_csv('Output_data/currentseason_team.csv', index = False)
-
-current_season_df(team_dim)
+    except:
+        print('Error with script')
+        break
