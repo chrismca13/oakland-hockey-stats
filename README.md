@@ -12,8 +12,8 @@ https://app.powerbi.com/groups/me/reports/a6c8c1e2-637e-4d37-ab5d-3fb87544ebc6/R
 
 Overview of files:
 
-* **GangGreenStats_ThisSeason.py**: Gets all the team, goalie, and individual stats for a single division, and updates a local CSV that my Power BI dashboard is pointed toward.
-* **OaklandHockey_Payer_AllTime.py**: Gets the individual player stats for a single division going back to 2007.
+* **GangGreenStats_ThisSeason.py**: Gets all the team, goalie, and individual stats for a single division, and updates a local CSV that my Power BI dashboard is pointed toward (saved in Output_data folder).
+* **OaklandHockey_Payer_AllTime.py**: Gets the individual player stats for a single division going back to 2007 and updates a CSV.
 * **Oakland Hockey Scouting Report.pbi**: Power BI workbook that contains individual all time stats and team scouting reports.
 * **Oakland Gang Green Hockey Stats.twb**: Tableau dashboard simialr to the PBI one. Currently uploaded to Tableau public.
 
