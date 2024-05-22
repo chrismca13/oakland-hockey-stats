@@ -18,5 +18,5 @@ Overview of files:
 * **Oakland Gang Green Hockey Stats.twb**: Tableau dashboard simialr to the PBI one. Currently uploaded to Tableau public.
 
 **To Refresh current year data:**
-* cd Documents\GitHub\HockeyStat
+* cd Documents\GitHub\HockeyStats
 * py .\GangGreenStats_ThisSeason.py
