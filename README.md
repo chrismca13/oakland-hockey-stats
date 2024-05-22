@@ -17,4 +17,6 @@ Overview of files:
 * **Oakland Hockey Scouting Report.pbi**: Power BI workbook that contains individual all time stats and team scouting reports.
 * **Oakland Gang Green Hockey Stats.twb**: Tableau dashboard simialr to the PBI one. Currently uploaded to Tableau public.
 
-
+**To Refresh current year data:**
+cd Documents\GitHub\HockeyStat
+py .\GangGreenStats_ThisSeason.py
