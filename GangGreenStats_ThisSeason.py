@@ -87,11 +87,3 @@ def current_season_df(team_dim_df):
 
 stats, goalies, team = current_season_df(team_dim)
 print('Run Complete')
-
-    # Run every 6 days (unless computer is shut off)
-    # time.sleep(518400) # number is in seconds
-    
-
-#except:
-    #print('Error with script')
-    #break
