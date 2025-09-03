@@ -1,0 +1,21 @@
+{
+  "TOTAL_REFRESH": false,
+  
+  "SEASON_DIM_PATH": "../Input_data/OaklandHockeySeasonDim.csv",
+
+  "CURRENT_BUCKET_PATH": "s3://gang-green-hockey/ALL_OaklandHockeyData.csv",
+
+  "BUCKET_NAME": "gang-green-hockey",
+
+  "NEW_FILE_NAME": "ALL_OaklandHockeyData_CURRENT.csv",
+
+  "DIVISION_DICT": {
+    "99": "D1",
+    "210": "D3",
+    "104": "D5",
+    "98": "D6",
+    "138": "D7",
+    "198": "D8",
+    "211": "D9"
+  }
+}
