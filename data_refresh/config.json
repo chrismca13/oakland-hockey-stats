@@ -1,7 +1,7 @@
 {
   "TOTAL_REFRESH": false,
   
-  "SEASON_DIM_PATH": "../Input_data/OaklandHockeySeasonDim.csv",
+  "SEASON_DIM_PATH": "Input_data/OaklandHockeySeasonDim.csv",
 
   "CURRENT_BUCKET_PATH": "s3://gang-green-hockey/ALL_OaklandHockeyData.csv",
 

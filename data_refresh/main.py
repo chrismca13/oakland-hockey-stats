@@ -1,10 +1,12 @@
 import pandas as pd
+import os
+import json
 
 from helpers import upload_df_to_s3, initial_web_data, update_current_season, data_manip
 
 # Load config.json
-import json
-with open("config.json", "r") as f:
+config_path = os.path.join(os.path.dirname(__file__), "config.json")
+with open(config_path, "r") as f:
     config = json.load(f)
 
 TOTAL_REFRESH = config["TOTAL_REFRESH"]
