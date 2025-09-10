@@ -23,4 +23,4 @@ jobs:
         run: pip install pandas boto3 s3fs fsspec
 
       - name: Run refresh script
-        run: python data_refresh/main.py
+        run: python main.py
