@@ -4,7 +4,7 @@ import json
 
 from data_refresh.helpers import upload_df_to_s3, initial_web_data, update_current_season, data_manip
 
-# Load config.json
+# Load config.json 
 with open("data_refresh/config.json", "r") as f:
     config = json.load(f)
 
