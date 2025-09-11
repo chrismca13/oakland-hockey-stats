@@ -1,18 +1,15 @@
 import streamlit as st
 import pandas as pd
+import os
 
 # Load data from S3
 @st.cache_data
-import os
-import pandas as pd
-import streamlit as st
-
-@st.cache_data
 def load_data():
     # Get AWS credentials from environment variables / Streamlit Secrets
-    aws_key = os.environ.get("AWS_ACCESS_KEY_ID")
-    aws_secret = os.environ.get("AWS_SECRET_ACCESS_KEY")
-    aws_region = os.environ.get("AWS_DEFAULT_REGION", "us-east-2")
+
+    aws_key = st.secrets["AWS_ACCESS_KEY_ID"]
+    aws_secret = st.secrets["AWS_SECRET_ACCESS_KEY"]
+    aws_region = st.secrets.get("AWS_DEFAULT_REGION", "us-east-2")
 
     # Ensure credentials are present
     if not aws_key or not aws_secret:
