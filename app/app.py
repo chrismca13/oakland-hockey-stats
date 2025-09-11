@@ -3,9 +3,37 @@ import pandas as pd
 
 # Load data from S3
 @st.cache_data
+import os
+import pandas as pd
+import streamlit as st
+
+@st.cache_data
 def load_data():
-    df = pd.read_csv("s3://gang-green-hockey/ALL_OaklandHockeyData_CURRENT.csv", storage_options={'client_kwargs': {'region_name': 'us-east-2'}})
-    return df
+    # Get AWS credentials from environment variables / Streamlit Secrets
+    aws_key = os.environ.get("AWS_ACCESS_KEY_ID")
+    aws_secret = os.environ.get("AWS_SECRET_ACCESS_KEY")
+    aws_region = os.environ.get("AWS_DEFAULT_REGION", "us-east-2")
+
+    # Ensure credentials are present
+    if not aws_key or not aws_secret:
+        st.error("AWS credentials are missing! Set them as environment variables or in Streamlit Secrets.")
+        return pd.DataFrame()  # return empty DataFrame to prevent crashing
+
+    # Read the CSV from S3
+    try:
+        df = pd.read_csv(
+            "s3://gang-green-hockey/ALL_OaklandHockeyData_CURRENT.csv",
+            storage_options={
+                "key": aws_key,
+                "secret": aws_secret,
+                "client_kwargs": {"region_name": aws_region}
+            }
+        )
+        return df
+    
+    except Exception as e:
+        st.error(f"Failed to load data from S3: {e}")
+        return pd.DataFrame()
 
 df = load_data()
 
