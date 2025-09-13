@@ -1,12 +1,30 @@
-### Adult League Hockey Stats
+## Adult League Hockey Stats
 
 My beer league hockey team had the same problem a lot of other teams have. The rink only displays player statistics one season at a time, but a lot of us want to know how our stats look for our entire careers. 
 
-To solve this problem, I created a web app that tracks our stacks going back 15+ years:
+To solve this problem, I created a web app that tracks our stats going back 15+ years:
 [https://oakhockey.streamlit.app/](https://oakhockey.streamlit.app/)
 
-Overview of files:
+#### Summary of Process
+1. The Oakland Ice Center tracks player stats for every division on their [website](https://stats.sharksice.timetoscore.com/display-stats.php?league=27).
+* They also track stats going back several years, which can be accessed by adjusting the `season=` parameter in the URL.
+2. We iterate over the seasons, storing everyone's stats in a data frame.
+3. We store that data in the s3 path defined in the `data_refresh/config.json`. The default path is below, which has public read access:
+* `"s3://gang-green-hockey/ALL_OaklandHockeyData.csv"`
+* Steps 1-3 only run when the `TOTAL_REFRESH` parameters in `data_refresh/config.json` is set to `TRUE`. This needs to be done at the start of the season. 
+* We also need to update the `Input_data/OaklandHockeySeasonDim.csv` file with the new season identifier.
 
+4. If `TOTAL_REFRESH` is set to `FALSE` (which is the default), then the following process runs every Wednesday morning:
+* Read in the data stored in the s3 path under `CURRENT_BUCKET_PATH` in `data_refresh/config.json`. The default is `s3://gang-green-hockey/ALL_OaklandHockeyData.csv`. 
+* We delete the current season's data, and replace it with up to date stats as of the refresh date. All this happens in the `update_current_season()` function.
+* We aggregate the data from player-date grain up to the player grain, summarizing most statistics by summing. This happens in the `data_manip()` function.
+* Lastly, we upload the data to the s3 path in the `config.json`, supplied by the `NEW_FILE_NAME` parameter. The default path is `"s3://gang-green-hockey/ALL_OaklandHockeyData_CURRENT.csv"`
+5. Step 4 runs every Wednesday morning, and the web app consumes the data directly from  `"s3://gang-green-hockey/ALL_OaklandHockeyData_CURRENT.csv"`
+
+
+
+
+Overview of files:
 ```
 ├── app/
 │   ├── app.py           # Streamlit web app for interactive stats visualization
