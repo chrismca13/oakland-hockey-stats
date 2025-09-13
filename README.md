@@ -5,8 +5,6 @@ My beer league hockey team had the same problem a lot of other teams have. The r
 To solve this problem, I created a web app that tracks our stacks going back 15+ years:
 [https://oakhockey.streamlit.app/](https://oakhockey.streamlit.app/)
 
-![alt text](image.png)
-
 Overview of files:
 
 ```
