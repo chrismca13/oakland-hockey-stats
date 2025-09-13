@@ -5,6 +5,9 @@ My beer league hockey team had the same problem a lot of other teams have. The r
 To solve this problem, I created a web app that tracks our stats going back 15+ years:
 [https://oakhockey.streamlit.app/](https://oakhockey.streamlit.app/)
 
+<img width="1420" height="599" alt="image" src="https://github.com/user-attachments/assets/38818b6e-0775-499b-9beb-8a37b92ba996" />
+
+
 #### Summary of Process
 1. The Oakland Ice Center tracks player stats for every division on their [website](https://stats.sharksice.timetoscore.com/display-stats.php?league=27).
 * They also track stats going back several years, which can be accessed by adjusting the `season=` parameter in the URL.
