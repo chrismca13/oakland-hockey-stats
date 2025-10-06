@@ -30,16 +30,19 @@ def upload_df_to_s3(df: pd.DataFrame, bucket_name: str, new_file_name: str, regi
     csv_buffer = StringIO()
     df.to_csv(csv_buffer, index=False)
 
-    # Upload using boto3 with ACL
-    s3 = boto3.client("s3", region_name=region)
-    s3.put_object(
-        Bucket=bucket_name,
-        Key=new_file_name,
-        Body=csv_buffer.getvalue(),
-        ACL="bucket-owner-full-control"
-    )
 
-    print(f"New data now available in {bucket_name} with name: {new_file_name}")
+    # Upload using boto3 with ACL and error handling
+    s3 = boto3.client("s3", region_name=region)
+    try:
+        s3.put_object(
+            Bucket=bucket_name,
+            Key=new_file_name,
+            Body=csv_buffer.getvalue(),
+            ACL="bucket-owner-full-control"
+        )
+        print(f"New data now available in {bucket_name} with name: {new_file_name}")
+    except Exception as e:
+        print(f"Failed to upload to S3: {e}")
 
 
 
