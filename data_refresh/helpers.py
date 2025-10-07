@@ -76,11 +76,13 @@ def initial_web_data(season_dim_csv, s3_current, new_file_name, div_dict, bucket
 
             # There are gaps in season IDs (for example there's no season #34). 
             # This would cause an error when reading the URL so we need to handle that with the try / except code block below. 
+            
+            headers = {"User-Agent": "Mozilla/5.0"}
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            print(f"HTML for {url}:\n{response.text[:2000]}")
             try:
-                headers = {"User-Agent": "Mozilla/5.0"}
-                response = requests.get(url, headers=headers)
-                response.raise_for_status()
-                print(f"HTML for {url}:\n{response.text[:2000]}")
+                
                 df = pd.read_html(url)
                 df[0].columns = df[0].columns.droplevel()
                 df[0]['SeasonID'] = int(season_id)
