@@ -6,7 +6,7 @@ import os
 from io import StringIO
 import boto3
 from datetime import datetime
-import requests
+# import requests
 import fsspec
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -122,21 +122,21 @@ def update_current_season(s3_path, div_dict):
 
         # There are gaps in season IDs (for example there's no season #34). 
         # This would cause an error when reading the URL so we need to handle that with the try / except code block below. 
-        headers = {"User-Agent": "Mozilla/5.0"}
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
+        # headers = {"User-Agent": "Mozilla/5.0"}
+        # response = requests.get(url, headers=headers)
+        # response.raise_for_status()
         
+        try:
+            df_curr = pd.read_html(url)
+            df_curr[0].columns = df_curr[0].columns.droplevel()
+            df_curr[0]['SeasonID'] = int(max_season)
+            df_curr[0]['division'] = str(div_dict[league_id])
 
-        df_curr = pd.read_html(url)
-        df_curr[0].columns = df_curr[0].columns.droplevel()
-        df_curr[0]['SeasonID'] = int(max_season)
-        df_curr[0]['division'] = str(div_dict[league_id])
+            df_drop_curr_season = pd.concat([df_drop_curr_season, df_curr[0]])
 
-        df_drop_curr_season = pd.concat([df_drop_curr_season, df_curr[0]])
-
-        # except:
-        #     print('Division ID: ' + str(league_id) + ' does not exist. Skipping...')
-        #     print(url)
+        except:
+            print('Division ID: ' + str(league_id) + ' does not exist. Skipping...')
+            print(url)
     
     return df_drop_curr_season
 
