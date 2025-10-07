@@ -127,20 +127,20 @@ def update_current_season(s3_path, div_dict):
         response.raise_for_status()
         print(f"HTML for {url}:\n{response.text[:2000]}")
         
-        try:
-            print('Reading URL: ' + url)
-            df_curr = pd.read_html(url)
-            print('df string created')
-            df_curr[0].columns = df_curr[0].columns.droplevel()
-            print('selected table, columns selected')
-            df_curr[0]['SeasonID'] = int(max_season)
-            df_curr[0]['division'] = str(div_dict[league_id])
+        #try:
+        print('Reading URL: ' + url)
+        df_curr = pd.read_html(url)
+        print('df string created')
+        df_curr[0].columns = df_curr[0].columns.droplevel()
+        print('selected table, columns selected')
+        df_curr[0]['SeasonID'] = int(max_season)
+        df_curr[0]['division'] = str(div_dict[league_id])
 
-            df_drop_curr_season = pd.concat([df_drop_curr_season, df_curr[0]])
+        df_drop_curr_season = pd.concat([df_drop_curr_season, df_curr[0]])
 
-        except:
-            print('Division ID: ' + str(league_id) + ' does not exist. Skipping...')
-            print(url)
+        # except:
+        #     print('Division ID: ' + str(league_id) + ' does not exist. Skipping...')
+        #     print(url)
     
     return df_drop_curr_season
 
