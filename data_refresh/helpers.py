@@ -6,7 +6,7 @@ import os
 from io import StringIO
 import boto3
 from datetime import datetime
-import s3fs
+import requests
 import fsspec
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -113,23 +113,26 @@ def update_current_season(s3_path, div_dict):
 
     # May need to change this if the league adds a new division
     for league_id in list(div_dict.keys()):
-
         url = 'https://stats.sharksice.timetoscore.com/display-league-stats?stat_class=1&league=27&season=' + str(int(max_season)) + '&level=' + str(league_id) + '&conf=0'
-
-        # There are gaps in season IDs (for example there's no season #34). 
-        # This would cause an error when reading the URL so we need to handle that with the try / except code block below. 
         try:
-            df_curr = pd.read_html(url)
+            headers = {"User-Agent": "Mozilla/5.0"}
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            print(f"Fetched HTML for {url}: {response.status_code}")
+            print(response.text[:500])  # Print first 500 chars for debugging
+
+            df_curr = pd.read_html(response.text)
             df_curr[0].columns = df_curr[0].columns.droplevel()
             df_curr[0]['SeasonID'] = int(max_season)
             df_curr[0]['division'] = str(div_dict[league_id])
 
             df_drop_curr_season = pd.concat([df_drop_curr_season, df_curr[0]])
 
-        except:
-            print('Division ID: ' + str(league_id) + ' does not exist. Skipping...')
+        except Exception as e:
+            print('Division ID: ' + str(league_id) + ' does not exist or failed to parse. Skipping...')
             print(url)
-    
+            print(f"Error: {e}")
+
     return df_drop_curr_season
 
 
