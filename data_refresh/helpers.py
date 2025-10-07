@@ -105,11 +105,13 @@ def update_current_season(s3_path, div_dict):
     and appends it to the historical data.
     """
 
+    print('Begin update_current_season function')
     df = pd.read_csv(s3_path)
-
+    print('Read in current data from S3')
     max_season = df['SeasonID'].max()
-
     df_drop_curr_season = df[df['SeasonID'] != max_season]
+
+    print('dropped current season')
 
     # May need to change this if the league adds a new division
     for league_id in list(div_dict.keys()):
