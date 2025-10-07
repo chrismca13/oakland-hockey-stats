@@ -5,6 +5,10 @@ on:
   schedule:
     - cron: '0 13 * * 3' # Runs at 6am Pacific (13 UTC) every Wednesday
 
+  push:
+    branches:
+      - main
+
 jobs:
   refresh:
     runs-on: ubuntu-latest

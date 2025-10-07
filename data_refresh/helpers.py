@@ -125,14 +125,10 @@ def update_current_season(s3_path, div_dict):
         headers = {"User-Agent": "Mozilla/5.0"}
         response = requests.get(url, headers=headers)
         response.raise_for_status()
-        print(f"HTML for {url}:\n{response.text[:2000]}")
         
-        #try:
-        print('Reading URL: ' + url)
+
         df_curr = pd.read_html(url)
-        print('df string created')
         df_curr[0].columns = df_curr[0].columns.droplevel()
-        print('selected table, columns selected')
         df_curr[0]['SeasonID'] = int(max_season)
         df_curr[0]['division'] = str(div_dict[league_id])
 
