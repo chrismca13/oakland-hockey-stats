@@ -1,5 +1,7 @@
 streamlit==1.49.1
-pandas==2.2.0
+andas==2.2.0
+lxml==5.2.1
+html5lib==1.1
 boto3==1.40.18
 s3fs==2025.9.0
 fsspec==2025.9.0
