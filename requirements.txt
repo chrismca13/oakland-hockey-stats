@@ -1,8 +1,8 @@
-streamlit
+streamlit==1.49.1
 pandas==2.2.0
-boto3
-s3fs
-fsspec
-pyarrow
+boto3==1.40.18
+s3fs==2025.9.0
+fsspec==2025.9.0
+pyarrow==21.0.0
 plotly
 
