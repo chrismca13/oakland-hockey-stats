@@ -4,9 +4,7 @@ import json
 
 from data_refresh.helpers import upload_df_to_s3, initial_web_data, update_current_season, data_manip
 
-
-print('start main.py')
-# Load config.json 
+    # Load config.json 
 with open("data_refresh/config.json", "r") as f:
     config = json.load(f)
 
@@ -24,8 +22,8 @@ def main():
 
     print('reading in season_dim')
     season_dim = pd.read_csv(SEASON_DIM_PATH)
-    if TOTAL_REFRESH:
-        data = initial_web_data(season_dim, CURRENT_BUCKET_PATH, NEW_FILE_NAME, DIVISION_DICT, BUCKET_NAME)
+    #if TOTAL_REFRESH:
+        #data = initial_web_data(season_dim, CURRENT_BUCKET_PATH, NEW_FILE_NAME, DIVISION_DICT, BUCKET_NAME)
 
     print('running update_current_season')
     # Run this even if TOTAL_REFRESH == TRUE so it drops data in the config's designated S3 path
