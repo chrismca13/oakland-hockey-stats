@@ -3,7 +3,11 @@ name: Weekly Data Refresh
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 13 * * 3' # Runs at 6am Pacific (13 UTC) every Wednesday
+    # Runs daily at 07:00, 15:00, and 23:00 UTC
+    # Adjust so streamlit refreshes at least every 12 hours. 
+    - cron: '0 7 * * *'
+    - cron: '0 15 * * *'
+    - cron: '0 23 * * *'
 
   push:
     branches:
