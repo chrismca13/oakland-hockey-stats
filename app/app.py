@@ -98,5 +98,3 @@ fig = px.scatter(
     title='Games Played vs Points'
 )
 st.plotly_chart(fig, use_container_width=True)
-
-st.caption("By Chris McAllister")
