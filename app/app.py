@@ -60,13 +60,14 @@ filtered_df = filtered_df[
 if 'Min' in df.columns:
     filtered_df = filtered_df[(filtered_df['Min'] >= min_slider[0]) & (filtered_df['Min'] <= min_slider[1])]
 
-# Add player name filter
+# Create a separate filtered_df for the table that includes player name filter
+table_df = filtered_df.copy()
 if selected_player and selected_player.strip():
-    filtered_df = filtered_df[filtered_df['Name'].str.contains(selected_player.strip(), case=False, na=False)]
+    table_df = table_df[table_df['Name'].str.contains(selected_player.strip(), case=False, na=False)]
 
 # Sortable table
 st.subheader("Player Stats Table")
-st.dataframe(filtered_df.sort_values(by=['Goals', 'Ass.', 'Pts'], ascending=False).reset_index(drop=True), width='stretch')
+st.dataframe(table_df.sort_values(by=['Goals', 'Ass.', 'Pts'], ascending=False).reset_index(drop=True), width='stretch')
 
 
 # Apply filters to the bar chart as well, and sort x-axis by Points
