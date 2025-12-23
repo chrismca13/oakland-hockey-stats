@@ -16,10 +16,15 @@ on:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    # Add permissions to allow the Action to push code back to the repo
+    permissions:
+      contents: write
+      
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      
     steps:
       - uses: actions/checkout@v3
 
@@ -34,3 +39,10 @@ jobs:
 
       - name: Run refresh script
         run: python main.py
+
+      - name: Push empty commit to keep Streamlit awake
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "Keep-alive: Periodic data refresh"
+          git push
