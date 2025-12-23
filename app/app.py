@@ -89,12 +89,19 @@ scatter_df = (
 scatter_df['GP'] = pd.to_numeric(scatter_df['GP'], errors='coerce')
 scatter_df['Pts'] = pd.to_numeric(scatter_df['Pts'], errors='coerce')
 
+# Highlight searched player if provided
+scatter_df['Highlighted'] = 'Other Players'
+if selected_player and selected_player.strip():
+    scatter_df.loc[scatter_df['Name'].str.contains(selected_player.strip(), case=False, na=False), 'Highlighted'] = 'Searched Player'
+
 fig = px.scatter(
     scatter_df,
     x='GP',
     y='Pts',
     hover_name='Name',
     hover_data=['Goals', 'Ass.', 'Pts'],
+    color='Highlighted',
+    color_discrete_map={'Searched Player': '#FF6B6B', 'Other Players': '#4C72B0'},
     title='Games Played vs Points'
 )
 st.plotly_chart(fig, use_container_width=True)
