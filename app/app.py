@@ -1,27 +1,27 @@
 import streamlit as st
 import pandas as pd
 import logging
+from datetime import datetime
 import os
 
 # Load data from S3
 @st.cache_data()
 def load_data():
-
-    df = pd.DataFrame()
     try:
         df = pd.read_csv(
             "s3://gang-green-hockey/ALL_OaklandHockeyData_CURRENT.csv"
         )
+        loaded_at = datetime.now()
         logging.info(f"Loaded CSV from S3, shape={df.shape}")
+        return df, loaded_at
     except Exception as e:
         logging.exception("Failed to load data from S3")
         st.error(f"Failed to load data from S3: {e}")
+        return pd.DataFrame(), None
 
-    return df
+df, loaded_at = load_data()
 
-df = load_data()
-
-st.title("Oakland Beer League Hockey Stats")
+st.title("Oakland Adult League Hockey Stats")
 
 # Sidebar filters
 teams = sorted(df['Team'].dropna().unique())
@@ -106,3 +106,10 @@ fig = px.scatter(
     title='Games Played vs Points'
 )
 st.plotly_chart(fig, use_container_width=True)
+
+st.divider()
+
+if loaded_at:
+    st.caption(
+        f"Data last refreshed: {loaded_at.strftime('%Y-%m-%d %I:%M:%S %p')}"
+    )
